@@ -57,27 +57,30 @@
         .countdown {
           display: flex;
           justify-content: center;
-          gap: 15px;
-          margin-top: 20px;
           flex-wrap: wrap;
+          gap: 10px;
+          margin-top: 20px;
+          padding: 0 10px;
         }
 
         .countdown-box {
           background: rgba(255, 255, 255, 0.2);
-          padding: 15px 20px;
+          padding: 10px 15px;
           border-radius: 10px;
-          min-width: 70px;
+          flex: 1 1 70px;
+          max-width: 80px;
           box-shadow: 0 4px 6px rgba(0,0,0,0.3);
         }
 
         .countdown-box .digit {
-          font-size: 2rem;
+          font-size: 6vw;
           font-weight: bold;
           display: block;
+          line-height: 1;
         }
 
         .countdown-box .label {
-          font-size: 0.9rem;
+          font-size: 3vw;
           margin-top: 5px;
         }
 
@@ -131,22 +134,26 @@
 
         @media screen and (max-width: 400px) {
           .countdown-box {
-            padding: 10px;
-            min-width: 50px;
+            padding: 8px 10px;
+            max-width: 60px;
           }
 
           .countdown-box .digit {
-            font-size: 1.5rem;
+            font-size: 7vw;
           }
 
-          .rsvp-button {
-            font-size: 1rem;
-            padding: 10px 20px;
+          .countdown-box .label {
+            font-size: 3.5vw;
           }
 
           .photo-collage img {
             width: 100px;
             height: 100px;
+          }
+
+          .rsvp-button {
+            font-size: 1rem;
+            padding: 10px 20px;
           }
         }
     </style>
