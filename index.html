@@ -55,37 +55,37 @@
           text-shadow: 0 0 5px rgba(0, 0, 0, 0.7);
         }
 
-        .countdown {
+ .countdown {
   display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 10px;
+  justify-content: space-between;
+  gap: 8px;
   margin-top: 20px;
   max-width: 95vw;
   margin-left: auto;
   margin-right: auto;
+  flex-wrap: nowrap;
 }
 
 .countdown-box {
   background: rgba(255, 255, 255, 0.2);
-  padding: 10px;
-  border-radius: 10px;
-  flex: 0 1 calc(25% - 10px);
+  padding: 6px;
+  border-radius: 8px;
+  flex: 1 1 22%;
   box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-  min-width: 60px;
 }
 
 .countdown-box .digit {
-  font-size: clamp(1.5rem, 5vw, 2rem);
+  font-size: clamp(1rem, 4vw, 1.6rem);
   font-weight: bold;
   display: block;
   line-height: 1;
 }
 
 .countdown-box .label {
-  font-size: clamp(0.7rem, 2.5vw, 0.9rem);
-  margin-top: 5px;
+  font-size: clamp(0.6rem, 2vw, 0.8rem);
+  margin-top: 2px;
 }
+
 
         .rsvp-button {
           margin: 20px 0;
