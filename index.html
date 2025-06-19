@@ -257,22 +257,6 @@
             <img src="photo2.jpg" alt="2" />
             <img src="photo3.jpg" alt="3" />
             <img src="photo4.jpg" alt="4" />
-            <!-- repeat these to simulate infinite loop -->
-            <img src="photo2.jpg" alt="2" />
-            <img src="photo3.jpg" alt="3" />
-            <img src="photo4.jpg" alt="4" />
-            <!-- Repeat-->
-            <img src="photo2.jpg" alt="2" />
-            <img src="photo3.jpg" alt="3" />
-            <img src="photo4.jpg" alt="4" />
-            <!-- Repeat-->
-            <img src="photo2.jpg" alt="2" />
-            <img src="photo3.jpg" alt="3" />
-            <img src="photo4.jpg" alt="4" />
-            <!-- Repeat-->
-            <img src="photo2.jpg" alt="2" />
-            <img src="photo3.jpg" alt="3" />
-            <img src="photo4.jpg" alt="4" />
         </div>
     </div>
 </section>
@@ -345,17 +329,14 @@
 </script>
 
 <script>
-  const isMobile = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent);
+    const carousel = document.querySelector(".carousel-container");
+    const track = document.querySelector(".carousel-track");
 
-  const carousel = document.querySelector(".carousel-container");
-  const track = document.querySelector(".carousel-track");
-
-  if (isMobile) {
-    // 🌀 Continuous flow on mobile
+    // 🌀 Unified continuous flow for all devices
     let offset = 0;
-    const speed = 0.3; // pixels per frame (adjust to preference)
+    const speed = 0.8; // Adjust speed (0.2 = slow, 0.5 = faster)
 
-    // Duplicate track content for seamless loop
+    // Duplicate track content for infinite loop effect
     track.innerHTML += track.innerHTML;
 
     function animate() {
@@ -368,29 +349,8 @@
     }
 
     track.style.willChange = "transform";
-    track.style.transition = "none"; // disable step transitions
+    track.style.transition = "none";
     requestAnimationFrame(animate);
-  } else {
-    // 🖥 ScrollTo version on desktop
-    const images = track.querySelectorAll("img");
-    const imageWidth = 120; // width + gap
-    const visibleImages = 3;
-    let scrollPosition = 0;
-
-    function autoScrollDesktop() {
-      scrollPosition += imageWidth;
-      carousel.scrollTo({ left: scrollPosition, behavior: "smooth" });
-
-      if (scrollPosition >= (imageWidth * (images.length - visibleImages))) {
-        setTimeout(() => {
-          carousel.scrollTo({ left: 0, behavior: "auto" });
-          scrollPosition = 0;
-        }, 500);
-      }
-    }
-
-    setInterval(autoScrollDesktop, 2000);
-  }
 </script>
 
 </body>
