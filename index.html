@@ -184,6 +184,38 @@
   }
 }
 
+.carousel-container {
+  width: 600px; /* only 3 images fit */
+  margin: 0 auto;
+  overflow-x: scroll;
+  scroll-snap-type: x mandatory;
+  display: flex;
+  justify-content: center;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+}
+.carousel-container::-webkit-scrollbar {
+  display: none;
+}
+
+.carousel-track {
+  display: flex;
+  gap: 20px;
+  padding: 20px 0;
+}
+
+.carousel-track img {
+  width: 180px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 12px;
+  flex-shrink: 0;
+  scroll-snap-align: center;
+  opacity: 1;
+  transform: none;
+}
+
+
     </style>
 </head>
 <body>
@@ -203,15 +235,40 @@
     <button class="rsvp-button" onclick="location.href='https://docs.google.com/forms/d/e/1FAIpQLScY3FTk2hkgvzT7eNJMLhFwH0n-sqEwdHWkqxUC046T5DVTWg/viewform?usp=dialog'">💌 RSVP Now</button>
 </section>
 
-<section>
+
+<section class="photo-showcase">
     <h2>Our Journey</h2>
-    <div class="photo-collage">
-        <img src="photo1.jpg" alt="Couple photo 1" loading="lazy">
-        <img src="photo2.jpg" alt="Couple photo 2" loading="lazy">
-        <img src="photo3.jpg" alt="Couple photo 3" loading="lazy">
-        <img src="photo4.jpg" alt="Couple photo 4" loading="lazy">
+    <div class="carousel-container">
+        <div class="carousel-track">
+            <img src="photo1.jpg" alt="1" />
+            <img src="photo2.jpg" alt="2" />
+            <img src="photo3.jpg" alt="3" />
+            <img src="photo4.jpg" alt="4" />
+            <!-- repeat these to simulate infinite loop -->
+            <img src="photo1.jpg" alt="1" />
+            <img src="photo2.jpg" alt="2" />
+            <img src="photo3.jpg" alt="3" />
+            <img src="photo4.jpg" alt="4" />
+            <!-- Repeat-->
+            <img src="photo1.jpg" alt="1" />
+            <img src="photo2.jpg" alt="2" />
+            <img src="photo3.jpg" alt="3" />
+            <img src="photo4.jpg" alt="4" />
+            <!-- Repeat-->
+            <img src="photo1.jpg" alt="1" />
+            <img src="photo2.jpg" alt="2" />
+            <img src="photo3.jpg" alt="3" />
+            <img src="photo4.jpg" alt="4" />
+            <!-- Repeat-->
+            <img src="photo1.jpg" alt="1" />
+            <img src="photo2.jpg" alt="2" />
+            <img src="photo3.jpg" alt="3" />
+            <img src="photo4.jpg" alt="4" />
+        </div>
     </div>
 </section>
+
+
 
 <section class="entourage">
     <h2>The Entourage</h2>
@@ -274,6 +331,35 @@
 
     updateCountdown();
     setInterval(updateCountdown, 1000);
+
+
 </script>
+
+<script>
+    const carousel = document.querySelector(".carousel-container");
+    const track = document.querySelector(".carousel-track");
+    const images = track.querySelectorAll("img");
+    const imgCount = images.length;
+    const imageWidth = 200; // width + gap
+
+    let scrollPosition = 0;
+
+    function autoScroll() {
+      scrollPosition += imageWidth;
+      carousel.scrollTo({ left: scrollPosition, behavior: "smooth" });
+
+      // If we've scrolled near the end, reset back to start (without animation)
+      if (scrollPosition >= (imageWidth * (imgCount - 3))) {
+        setTimeout(() => {
+          carousel.scrollTo({ left: 0, behavior: "auto" });
+          scrollPosition = 0;
+        }, 500); // match scroll duration
+      }
+    }
+
+    // Start scrolling loop every 3s
+    setInterval(autoScroll, 2000);
+</script>
+
 </body>
 </html>
