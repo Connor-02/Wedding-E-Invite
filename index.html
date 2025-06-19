@@ -345,49 +345,52 @@
 </script>
 
 <script>
-    const isMobile = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent);
+  const isMobile = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent);
 
-    const carousel = document.querySelector(".carousel-container");
-    const track = document.querySelector(".carousel-track");
+  const carousel = document.querySelector(".carousel-container");
+  const track = document.querySelector(".carousel-track");
+
+  if (isMobile) {
+    // 🌀 Continuous flow on mobile
+    let offset = 0;
+    const speed = 0.3; // pixels per frame (adjust to preference)
+
+    // Duplicate track content for seamless loop
+    track.innerHTML += track.innerHTML;
+
+    function animate() {
+      offset += speed;
+      if (offset >= track.scrollWidth / 2) {
+        offset = 0;
+      }
+      track.style.transform = `translateX(-${offset}px)`;
+      requestAnimationFrame(animate);
+    }
+
+    track.style.willChange = "transform";
+    track.style.transition = "none"; // disable step transitions
+    requestAnimationFrame(animate);
+  } else {
+    // 🖥 ScrollTo version on desktop
     const images = track.querySelectorAll("img");
-    const imageWidth = 120; // image + gap
+    const imageWidth = 120; // width + gap
     const visibleImages = 3;
-    let currentIndex = 0;
     let scrollPosition = 0;
 
-    if (isMobile) {
-      // ✅ Mobile-optimized transform version
-      function autoScrollMobile() {
-        currentIndex++;
-        if (currentIndex >= images.length - visibleImages) {
-          currentIndex = 0;
-          track.style.transition = "none";
-          track.style.transform = "translateX(0px)";
-          void track.offsetWidth;
-          requestAnimationFrame(() => {
-            track.style.transition = "transform 1s cubic-bezier(0.25, 0.46, 0.45, 0.94)";
-            track.style.transform = `translateX(-${imageWidth}px)`;
-            currentIndex = 1;
-          });
-        } else {
-          track.style.transform = `translateX(-${currentIndex * imageWidth}px)`;
-        }
+    function autoScrollDesktop() {
+      scrollPosition += imageWidth;
+      carousel.scrollTo({ left: scrollPosition, behavior: "smooth" });
+
+      if (scrollPosition >= (imageWidth * (images.length - visibleImages))) {
+        setTimeout(() => {
+          carousel.scrollTo({ left: 0, behavior: "auto" });
+          scrollPosition = 0;
+        }, 500);
       }
-      setInterval(autoScrollMobile, 3000);
-    } else {
-      // ✅ Desktop version using scrollTo
-      function autoScrollDesktop() {
-        scrollPosition += imageWidth;
-        carousel.scrollTo({ left: scrollPosition, behavior: "smooth" });
-        if (scrollPosition >= (imageWidth * (images.length - visibleImages))) {
-          setTimeout(() => {
-            carousel.scrollTo({ left: 0, behavior: "auto" });
-            scrollPosition = 0;
-          }, 500);
-        }
-      }
-      setInterval(autoScrollDesktop, 2000);
     }
+
+    setInterval(autoScrollDesktop, 2000);
+  }
 </script>
 
 </body>
