@@ -55,34 +55,36 @@
         }
 
         .countdown {
-          display: flex;
-          justify-content: center;
-          flex-wrap: wrap;
-          gap: 10px;
-          margin-top: 20px;
-          padding: 0 10px;
-        }
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 20px;
+  max-width: 95vw;
+  margin-left: auto;
+  margin-right: auto;
+}
 
-        .countdown-box {
-          background: rgba(255, 255, 255, 0.2);
-          padding: 10px 15px;
-          border-radius: 10px;
-          flex: 1 1 70px;
-          max-width: 80px;
-          box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-        }
+.countdown-box {
+  background: rgba(255, 255, 255, 0.2);
+  padding: 10px;
+  border-radius: 10px;
+  flex: 0 1 calc(25% - 10px);
+  box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+  min-width: 60px;
+}
 
-        .countdown-box .digit {
-          font-size: 6vw;
-          font-weight: bold;
-          display: block;
-          line-height: 1;
-        }
+.countdown-box .digit {
+  font-size: clamp(1.5rem, 5vw, 2rem);
+  font-weight: bold;
+  display: block;
+  line-height: 1;
+}
 
-        .countdown-box .label {
-          font-size: 3vw;
-          margin-top: 5px;
-        }
+.countdown-box .label {
+  font-size: clamp(0.7rem, 2.5vw, 0.9rem);
+  margin-top: 5px;
+}
 
         .rsvp-button {
           margin: 20px 0;
@@ -132,19 +134,22 @@
           border: none;
         }
 
-        @media screen and (max-width: 400px) {
-          .countdown-box {
-            padding: 8px 10px;
-            max-width: 60px;
-          }
+        /* Media query for phones in portrait */
+@media screen and (max-width: 400px) {
+  .countdown-box {
+    flex: 1 1 40%;
+    padding: 8px;
+    margin: 0 auto;
+  }
 
-          .countdown-box .digit {
-            font-size: 7vw;
-          }
+  .countdown-box .digit {
+    font-size: 1.5rem;
+  }
 
-          .countdown-box .label {
-            font-size: 3.5vw;
-          }
+  .countdown-box .label {
+    font-size: 0.8rem;
+  }
+}
 
           .photo-collage img {
             width: 100px;
