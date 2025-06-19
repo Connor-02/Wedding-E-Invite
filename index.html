@@ -53,37 +53,37 @@
           color: white;
           text-shadow: 0 0 5px rgba(0, 0, 0, 0.7);
         }
-
-        .countdown {
+.countdown {
   display: flex;
   justify-content: center;
-  flex-wrap: wrap;
-  gap: 10px;
+  flex-wrap: nowrap;
+  gap: 8px;
   margin-top: 20px;
-  max-width: 95vw;
-  margin-left: auto;
-  margin-right: auto;
+  padding: 0 10px;
+  max-width: 100%;
+  overflow-x: auto;
 }
 
 .countdown-box {
   background: rgba(255, 255, 255, 0.2);
-  padding: 10px;
-  border-radius: 10px;
-  flex: 0 1 calc(25% - 10px);
-  box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+  padding: 8px 10px;
+  border-radius: 8px;
   min-width: 60px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  flex-shrink: 1;
 }
 
 .countdown-box .digit {
-  font-size: clamp(1.5rem, 5vw, 2rem);
+  font-size: 1.4rem;
   font-weight: bold;
   display: block;
-  line-height: 1;
+  line-height: 1.2;
 }
 
 .countdown-box .label {
-  font-size: clamp(0.7rem, 2.5vw, 0.9rem);
-  margin-top: 5px;
+  font-size: 0.7rem;
+  margin-top: 4px;
+  letter-spacing: 0.5px;
 }
 
         .rsvp-button {
@@ -134,20 +134,19 @@
           border: none;
         }
 
-        /* Media query for phones in portrait */
+     /* Optional tweak for very narrow phones */
 @media screen and (max-width: 400px) {
   .countdown-box {
-    flex: 1 1 40%;
-    padding: 8px;
-    margin: 0 auto;
+    padding: 6px 8px;
+    min-width: 50px;
   }
 
   .countdown-box .digit {
-    font-size: 1.5rem;
+    font-size: 1.2rem;
   }
 
   .countdown-box .label {
-    font-size: 0.8rem;
+    font-size: 0.65rem;
   }
 }
 
