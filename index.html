@@ -345,30 +345,51 @@
 </script>
 
 <script>
+    const isMobile = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent);
+
     const carousel = document.querySelector(".carousel-container");
     const track = document.querySelector(".carousel-track");
     const images = track.querySelectorAll("img");
-    const imgCount = images.length;
-    const imageWidth = 200; // width + gap
-
+    const imageWidth = 120; // image + gap
+    const visibleImages = 3;
+    let currentIndex = 0;
     let scrollPosition = 0;
 
-    function autoScroll() {
-      scrollPosition += imageWidth;
-      carousel.scrollTo({ left: scrollPosition, behavior: "smooth" });
-
-      // If we've scrolled near the end, reset back to start (without animation)
-      if (scrollPosition >= (imageWidth * (imgCount - 3))) {
-        setTimeout(() => {
-          carousel.scrollTo({ left: 0, behavior: "auto" });
-          scrollPosition = 0;
-        }, 500); // match scroll duration
+    if (isMobile) {
+      // ✅ Mobile-optimized transform version
+      function autoScrollMobile() {
+        currentIndex++;
+        if (currentIndex >= images.length - visibleImages) {
+          currentIndex = 0;
+          track.style.transition = "none";
+          track.style.transform = "translateX(0px)";
+          void track.offsetWidth;
+          requestAnimationFrame(() => {
+            track.style.transition = "transform 0.5s ease-in-out";
+            track.style.transform = `translateX(-${imageWidth}px)`;
+            currentIndex = 1;
+          });
+        } else {
+          track.style.transform = `translateX(-${currentIndex * imageWidth}px)`;
+        }
       }
+      setInterval(autoScrollMobile, 2000);
+    } else {
+      // ✅ Desktop version using scrollTo
+      function autoScrollDesktop() {
+        scrollPosition += imageWidth;
+        carousel.scrollTo({ left: scrollPosition, behavior: "smooth" });
+        if (scrollPosition >= (imageWidth * (images.length - visibleImages))) {
+          setTimeout(() => {
+            carousel.scrollTo({ left: 0, behavior: "auto" });
+            scrollPosition = 0;
+          }, 500);
+        }
+      }
+      setInterval(autoScrollDesktop, 2000);
     }
-
-    // Start scrolling loop every 3s
-    setInterval(autoScroll, 2000);
 </script>
 
 </body>
 </html>
+
