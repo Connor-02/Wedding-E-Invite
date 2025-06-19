@@ -88,16 +88,25 @@
 
 
         .rsvp-button {
-          margin: 20px 0;
-          padding: 12px 24px;
-          font-size: 1.1rem;
-          background: #00bcd4;
-          color: white;
-          border: none;
-          border-radius: 8px;
-          cursor: pointer;
-          box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-        }
+  margin: 20px 0;
+  padding: 12px 24px;
+  font-size: 1.1rem;
+  background: rgba(255, 255, 255, 0.1); /* soft transparent background */
+  color: white;
+  border: 2px solid rgba(255, 255, 255, 0.6); /* faint white border */
+  border-radius: 8px;
+  cursor: pointer;
+  backdrop-filter: blur(4px); /* glassy effect */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  text-shadow: 0 1px 2px rgba(0,0,0,0.6);
+  transition: all 0.3s ease;
+}
+
+.rsvp-button:hover {
+  background: rgba(255, 255, 255, 0.25);
+  border-color: white;
+  transform: scale(1.03);
+}
 
         .photo-collage {
           display: flex;
@@ -156,11 +165,6 @@
             width: 100px;
             height: 100px;
           }
-
-          .rsvp-button {
-            font-size: 1rem;
-            padding: 10px 20px;
-          }
         }
 
         @media screen and (min-width: 768px) {
@@ -196,7 +200,7 @@
 <section>
     <h2>You're Invited!</h2>
     <p>Join us for our special day by the sea.</p>
-    <button class="rsvp-button" onclick="window.location.href='https://example.com/rsvp'">RSVP Now</button>
+    <button class="rsvp-button">💌 RSVP Now</button>
 </section>
 
 <section>
