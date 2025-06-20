@@ -60,10 +60,11 @@
   justify-content: space-between;
   gap: 8px;
   margin-top: 20px;
-  max-width: 95vw;
+  max-width: 500px;
   margin-left: auto;
   margin-right: auto;
   flex-wrap: nowrap;
+  padding: 0 5px;
 }
 
 .countdown-box {
@@ -72,7 +73,9 @@
   border-radius: 8px;
   flex: 1 1 22%;
   box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+  animation: pulse 3s infinite ease-in-out;
 }
+
 
 .countdown-box .digit {
   font-size: clamp(1rem, 4vw, 1.6rem);
@@ -228,6 +231,14 @@
   }
 }
 
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
 
 
     </style>
@@ -355,4 +366,3 @@
 
 </body>
 </html>
-
