@@ -136,10 +136,22 @@
         }
 
         .faq, .attire, .reminders {
-          text-align: left;
+          text-align: center;
           max-width: 600px;
           margin: auto;
         }
+
+        .reminders ul {
+          list-style-position: inside;     /* ✅ Keeps bullets close to the text */
+          display: inline-block;           /* ✅ Shrinks to content width */
+          text-align: left;                /* ✅ So bullets & text line up neatly */
+          padding: 0;
+          margin: 0 auto;                  /* ✅ Center the entire list block */
+        }
+
+       
+
+
 
         .venue iframe {
           width: 90%;
@@ -240,6 +252,17 @@
   }
 }
 
+.fade-in {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 1s ease, transform 1s ease;
+}
+
+.fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 
     </style>
 </head>
@@ -274,7 +297,7 @@
 
 
 
-<section class="entourage">
+<section class="entourage fade-in">
     <h2>The Entourage</h2>
     <ul>
         <li>Best Man: Best Man Guy</li>
@@ -284,19 +307,19 @@
     </ul>
 </section>
 
-<section class="faq">
+<section class="faq fade-in">
     <h2>FAQ</h2>
     <p><strong>What time should I arrive?</strong><br> Please arrive by 3:45 PM.</p>
     <p><strong>Is the venue accessible?</strong><br> Yes, it is wheelchair-friendly.</p>
     <p><strong>Can I bring a guest?</strong><br> Only guests listed on the invite.</p>
 </section>
 
-<section class="attire">
+<section class="attire fade-in">
     <h2>Attire</h2>
     <p>Beach formal: Linen, sundresses, and comfy sandals. Avoid heels etc.</p>
 </section>
 
-<section class="reminders">
+<section class="reminders fade-in">
     <h2>Reminders</h2>
     <ul>
         <li>No boxed gifts, please – envelopes only.</li>
@@ -305,7 +328,7 @@
     </ul>
 </section>
 
-<section class="venue">
+<section class="venue fade-in">
     <h2>Venue</h2>
     <p>Caves Coastal, Newcastle, Caves Beach</p>
     <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3342.163814416935!2d151.64319987809841!3d-33.10477691502382!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6b732164f44dc649%3A0x44b652f79ce27b40!2sCaves%20Coastal%20Bar%20and%20Bungalows!5e0!3m2!1sen!2sau!4v1750324293190!5m2!1sen!2sau" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></section>
@@ -373,6 +396,23 @@
     track.style.transition = "none";
     requestAnimationFrame(animate);
 </script>
+
+<script>
+  const fadeEls = document.querySelectorAll('.fade-in');
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, {
+    threshold: 0.3 // Section must be at least 30% visible to trigger fade-in
+  });
+
+  fadeEls.forEach(el => observer.observe(el));
+</script>
+
 
 </body>
 </html>
