@@ -298,6 +298,23 @@
   border-color: white;
 }
 
+.letter {
+  opacity: 0;
+  display: inline-block;
+  transform: translateY(20px);
+  animation: fadeUp 0.6s forwards;
+  text-shadow: 0 0 6px rgba(255, 255, 255, 0.8), 0 0 10px rgba(255, 255, 255, 0.6);
+}
+
+
+@keyframes fadeUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
 
 
 
@@ -305,7 +322,8 @@
 </head>
 <body>
 <header>
-    <h1>Keirra's & Brandon's Wedding</h1>
+    <h1 id="weddingTitle"></h1>
+
     <div class="countdown">
         <div class="countdown-box"><span class="digit" id="days">00</span><span class="label">DAYS</span></div>
         <div class="countdown-box"><span class="digit" id="hours">00</span><span class="label">HOURS</span></div>
@@ -488,12 +506,23 @@ button.addEventListener("click", () => {
       }
     });
   }, {
-    threshold: 0.3
+    threshold: 0.1
   });
 
   faders.forEach(fader => {
     appearOnScroll.observe(fader);
   });
+</script>
+
+<script>
+  const titleText = "Keirra's & Brandon's Wedding";
+  const titleElement = document.getElementById("weddingTitle");
+
+  titleElement.innerHTML = titleText
+    .split("")
+    .map((char, i) =>
+      `<span class="letter" style="animation-delay: ${i * 0.08}s">${char === " " ? "&nbsp;" : char}</span>`
+    ).join("");
 </script>
 
 
