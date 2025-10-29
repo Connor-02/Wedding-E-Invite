@@ -335,7 +335,7 @@
 <section>
     <h2>You're Invited!</h2>
     <p>Join us for our special day by the sea.</p>
-    <button class="rsvp-button" onclick="location.href='https://docs.google.com/forms/d/e/1FAIpQLScY3FTk2hkgvzT7eNJMLhFwH0n-sqEwdHWkqxUC046T5DVTWg/viewform?usp=dialog'">💌 RSVP Now</button>
+    <button class="rsvp-button" onclick="openRsvpModal()">💌 RSVP Now</button>
 </section>
 
 <section class="our-song">
@@ -410,6 +410,19 @@
   </p>
 </footer>
 
+<!-- RSVP Modal -->
+<div id="rsvpModal" style="position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.45);z-index:9999;">
+  <div style="width:min(520px,92vw);border-radius:14px;padding:18px;background:rgba(255,255,255,.88);backdrop-filter:blur(8px);color:#111;">
+    <h2 style="margin:.25rem 0 .5rem">Find Your RSVP</h2>
+    <p style="margin:0 0 12px;">Enter the code printed under your QR (e.g., <strong>allowplus</strong> or <strong>nopluses</strong>).</p>
+    <input id="rsvpCodeInput" placeholder="e.g. allowplus" style="width:100%;padding:10px 12px;font-size:16px;border-radius:10px;border:1px solid #ccc;margin-bottom:10px;" />
+    <div style="display:flex;gap:8px;">
+      <button onclick="submitRsvpCode()" style="flex:1;padding:10px 12px;border-radius:10px;background:#1f6feb;color:#fff;border:1px solid #1f6feb;cursor:pointer;">Continue</button>
+      <button onclick="closeRsvpModal()" style="padding:10px 12px;border-radius:10px;background:#eee;border:1px solid #ccc;cursor:pointer;">Cancel</button>
+    </div>
+    <div id="rsvpMsg" style="margin-top:10px;min-height:1.2em;color:#B00020;"></div>
+  </div>
+</div>
 
 
 <script>
@@ -525,6 +538,64 @@ button.addEventListener("click", () => {
     ).join("");
 </script>
 
+    <script>
+  // Modal controls
+  function openRsvpModal(){
+    document.getElementById('rsvpMsg').textContent = '';
+    document.getElementById('rsvpCodeInput').value = '';
+    document.getElementById('rsvpModal').style.display = 'flex';
+    setTimeout(()=>document.getElementById('rsvpCodeInput').focus(),50);
+  }
+  function closeRsvpModal(){ document.getElementById('rsvpModal').style.display = 'none'; }
+
+  // Helpers
+  function norm(s){ return (s||'').toString().trim().toLowerCase(); }
+  function getQuery(k){ return new URLSearchParams(location.search).get(k) || ''; }
+
+  async function loadGuests(){
+    // cache-buster while iterating; remove ?ts= once stable
+    const res = await fetch('./guests.json?ts=' + Date.now(), { cache: 'no-store' });
+    if(!res.ok) throw new Error('Could not load guests.json');
+    return res.json();
+  }
+
+  async function routeByCode(code){
+    const msg = document.getElementById('rsvpMsg');
+    try{
+      const guests = await loadGuests();
+      const match = guests.find(g => norm(g.code) === norm(code));
+      if(!match){ msg.textContent = 'Code not found. Try "allowplus" or "nopluses" as printed on your invite.'; return; }
+      msg.style.color = '#0a5';
+      msg.textContent = 'Redirecting to RSVP…';
+      window.location.href = match.formUrl;  // send to With+1 or No+1 form
+    }catch(e){
+      console.error(e);
+      msg.textContent = 'There was a problem loading the RSVP. Please try again.';
+    }
+  }
+
+  function submitRsvpCode(){
+    const code = document.getElementById('rsvpCodeInput').value;
+    if(!code){ document.getElementById('rsvpMsg').textContent = 'Please enter your code.'; return; }
+    routeByCode(code);
+  }
+
+  // Optional: auto-detect ?code= on the landing URL for instant routing
+  (function(){
+    const c = getQuery('code');
+    if(c){ openRsvpModal(); document.getElementById('rsvpCodeInput').value = c; submitRsvpCode(); }
+  })();
+
+  // Keyboard niceties
+  document.addEventListener('keydown', (e) => {
+    const modal = document.getElementById('rsvpModal');
+    if(modal.style.display === 'flex' && e.key === 'Enter') submitRsvpCode();
+    if(modal.style.display === 'flex' && e.key === 'Escape') closeRsvpModal();
+  });
+</script>
+
+
 
 </body>
 </html>
+
