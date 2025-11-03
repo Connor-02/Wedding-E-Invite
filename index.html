@@ -684,7 +684,7 @@ button.addEventListener("click", () => {
     try{
       const guests = await loadGuests();
       const match = guests.find(g => norm(g.code) === norm(code));
-      if(!match){ msg.textContent = 'Code not found. Try "allowplus" or "nopluses" as printed on your invite.'; return; }
+      if(!match){ msg.textContent = 'Code not found. Please check the code on your invitation and try again.'; return; }
       msg.style.color = '#0a5';
       msg.textContent = 'Redirecting to RSVP…';
       window.location.href = match.formUrl;  // send to With+1 or No+1 form
@@ -718,6 +718,7 @@ button.addEventListener("click", () => {
 
 </body>
 </html>
+
 
 
 
