@@ -1,553 +1,454 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="mobile-web-app-capable" content="yes">
-    <title>Keirra & Brandon's Wedding</title>
-    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Raleway:wght@400;700&display=swap" rel="stylesheet">
-    <style>
-
-        body {
-          font-family: 'Raleway', sans-serif;
-          margin: 0;
-          padding: 0;
-          color: white;
-          text-align: center;
-          position: relative;
-          min-height: 100vh;
-        }
-
-        body::before {
-          content: "";
-          position: fixed;
-          top: 0; left: 0;
-          width: 100%; height: 100%;
-          z-index: -1;
-          background-image: url('cavesBeachBackground.png');
-          background-size: cover;
-          background-position: center;
-          background-repeat: no-repeat;
-        }
-
-        header {
-          padding: 170px 20px 0px 20px;
-          background-color: rgba(0, 0, 0, 0.4);
-        }
-
-        section {
-          padding: 40px 20px;
-          background-color: rgba(0, 0, 0, 0.4);
-        }
-
-        h1 {
-          font-family: 'Great Vibes', cursive;
-          font-size: 3rem;
-          color: white;
-          text-shadow: 0 0 10px rgba(0, 0, 0, 0.7);
-          word-spacing: 0.1em;
-        }
-
-        h2, p, li, button {
-          font-family: 'Raleway', sans-serif;
-          color: white;
-          text-shadow: 0 0 5px rgba(0, 0, 0, 0.7);
-
-        }
-
- .countdown {
-  display: flex;
-  justify-content: space-between;
-  gap: 8px;
-  margin-top: 20px;
-  max-width: 500px;
-  margin-left: auto;
-  margin-right: auto;
-  flex-wrap: nowrap;
-  padding: 0 5px;
-}
-
-.countdown-box {
-  background: rgba(255, 255, 255, 0.2);
-  padding: 6px;
-  border-radius: 8px;
-  flex: 1 1 22%;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-  animation: pulse 3s infinite ease-in-out;
-}
-
-
-.countdown-box .digit {
-  font-size: clamp(1rem, 4vw, 1.6rem);
-  font-weight: bold;
-  display: block;
-  line-height: 1;
-}
-
-.countdown-box .label {
-  font-size: clamp(0.6rem, 2vw, 0.8rem);
-  margin-top: 2px;
-}
-
-
-        .rsvp-button {
-  margin: 20px 0;
-  padding: 12px 24px;
-  font-size: 1.1rem;
-  background: rgba(255, 255, 255, 0.1); /* soft transparent background */
-  color: white;
-  border: 2px solid rgba(255, 255, 255, 0.6); /* faint white border */
-  border-radius: 8px;
-  cursor: pointer;
-  backdrop-filter: blur(4px); /* glassy effect */
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-  text-shadow: 0 1px 2px rgba(0,0,0,0.6);
-  transition: all 0.3s ease;
-}
-
-.rsvp-button:hover {
-  background: rgba(255, 255, 255, 0.25);
-  border-color: white;
-  transform: scale(1.03);
-}
-
-        .photo-collage {
-          display: flex;
-          flex-wrap: wrap;
-          justify-content: center;
-          gap: 10px;
-        }
-
-        .photo-collage img {
-          width: 150px;
-          height: 150px;
-          object-fit: cover;
-          border-radius: 10px;
-          box-shadow: 0 4px 6px rgba(0,0,0,0.4);
-        }
-
-        .entourage ul {
-          list-style-type: none;
-          padding: 0;
-        }
-
-        .entourage li {
-          margin: 10px 0;
-        }
-
-        .faq, .attire, .reminders {
-          text-align: center;
-          max-width: 600px;
-          margin: auto;
-        }
-
-        .reminders ul {
-          list-style-position: inside;     /* ✅ Keeps bullets close to the text */
-          display: inline-block;           /* ✅ Shrinks to content width */
-          text-align: left;                /* ✅ So bullets & text line up neatly */
-          padding: 0;
-          margin: 0 auto;                  /* ✅ Center the entire list block */
-        }
-
-       
-
-
-
-        .venue iframe {
-          width: 90%;
-          height: 300px;
-          border: none;
-        }
-
-        /* Media query for phones in portrait */
-@media screen and (max-width: 400px) {
-  .countdown-box {
-    flex: 1 1 40%;
-    padding: 8px;
-    margin: 0 auto;
-  }
-
-  .countdown-box .digit {
-    font-size: 1.5rem;
-  }
-
-  .countdown-box .label {
-    font-size: 0.8rem;
-  }
-}
-
-          .photo-collage img {
-            width: 100px;
-            height: 100px;
-          }
-        }
-
-        @media screen and (min-width: 768px) {
-  .countdown-box {
-    padding: 10px 6px;
-    border-radius: 6px;
-    flex: 1 1 20%;
-    max-width: 160px;
-  }
-
-  .countdown-box .digit {
-    font-size: 1.8rem;
-  }
-
-  .countdown-box .label {
-    font-size: 0.85rem;
-  }
-}
-
-.carousel-container {
-  width: 600px; /* only 3 images fit */
-  margin: 0 auto;
-  overflow-x: scroll;
-  scroll-snap-type: x mandatory;
-  display: flex;
-  justify-content: center;
-  scroll-behavior: smooth;
-  scrollbar-width: none;
-}
-.carousel-container::-webkit-scrollbar {
-  display: none;
-}
-
-.carousel-track {
-  display: flex;
-  gap: 20px;
-  padding: 20px 0;
-}
-
-.carousel-track img {
-  width: 180px;
-  height: 120px;Add commentMore actions
-  object-fit: contain;
-  border-radius: 12px;
-  flex-shrink: 0;
-  scroll-snap-align: center;
-  opacity: 1;
-  transform: none;
-}
-
-
-        @media screen and (max-width: 600px) {
-  .carousel-container {
-    width: 100%; /* Full width on mobile */
-    padding: 10px 10px;
-  }
-
-  .carousel-track img {
-    width: 100px; /* Smaller image */
-    height: 150px;
-  }
-}
-
-@keyframes pulse {
-  0%, 100% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.05);
-  }
-}
-
-.fade-in {
-  opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 1s ease, transform 1s ease;
-}
-
-.fade-in.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.our-song {
-  background-color: rgba(0, 0, 0, 0.4);
-  padding: 30px 20px;
-  text-align: center;
-}
-
-.our-song h2 {
-  font-family: 'Great Vibes', cursive;
-  font-size: 2.5rem;
-  margin-bottom: 10px;
-}
-
-#playPauseBtn {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 1rem;
-  padding: 10px 20px;
-  background: rgba(255, 255, 255, 0.08);
-  border: 2px solid rgba(255, 255, 255, 0.5);
-  color: white;
-  border-radius: 10px;
-  cursor: pointer;
-  backdrop-filter: blur(6px);
-  box-shadow: 0 3px 8px rgba(0,0,0,0.3);
-  transition: all 0.3s ease;
-}
-
-#playPauseBtn:hover {
-  background: rgba(255, 255, 255, 0.18);
-  border-color: white;
-}
-
-.letter {
-  opacity: 0;
-  display: inline-block;
-  transform: translateY(20px);
-  animation: fadeUp 0.6s forwards;
-  text-shadow: 0 0 6px rgba(255, 255, 255, 0.8), 0 0 10px rgba(255, 255, 255, 0.6);
-}
-
-
-@keyframes fadeUp {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-        /* ✨ RSVP Modal Aesthetic Update */
-.rsvp-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.55);
-  backdrop-filter: blur(6px);
-  display: none;
-  align-items: center;
-  justify-content: center;
-  z-index: 9999;
-  animation: fadeInOverlay 0.3s ease forwards;
-}
-
-.rsvp-card {
-  background: rgba(255, 255, 255, 0.12);
-  backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  border-radius: 18px;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
-  padding: 28px 36px;
-  width: min(90%, 400px);
-  color: #fff;
-  text-align: center;
-  animation: fadeUpCard 0.4s ease forwards;
-}
-
-.rsvp-title {
-  font-family: 'Great Vibes', cursive;
-  font-size: 2rem;
-  margin: 0 0 10px;
-  color: white;
-}
-
-.rsvp-subtitle {
-  font-size: 0.95rem;
-  opacity: 0.85;
-  margin-bottom: 18px;
-  line-height: 1.4;
-}
-
-.rsvp-input {
-  width: 100%;
-  padding: 12px 14px;
-  font-size: 1rem;
-  border-radius: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  background: rgba(255, 255, 255, 0.15);
-  color: white;
-  text-align: center;
-  outline: none;
-  transition: all 0.3s ease;
-}
-
-.rsvp-input::placeholder {
-  color: rgba(255, 255, 255, 0.6);
-}
-
-.rsvp-input:focus {
-  background: rgba(255, 255, 255, 0.25);
-  border-color: white;
-}
-
-.rsvp-buttons {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 18px;
-  gap: 10px;
-}
-
-.rsvp-confirm, .rsvp-cancel {
-  flex: 1;
-  padding: 10px 0;
-  font-size: 1rem;
-  border-radius: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.6);
-  color: white;
-  cursor: pointer;
-  backdrop-filter: blur(4px);
-  transition: all 0.3s ease;
-}
-
-.rsvp-confirm {
-  background: rgba(255, 255, 255, 0.2);
-}
-
-.rsvp-confirm:hover {
-  background: rgba(255, 255, 255, 0.35);
-  transform: scale(1.03);
-}
-
-.rsvp-cancel {
-  background: rgba(255, 255, 255, 0.08);
-}
-
-.rsvp-cancel:hover {
-  background: rgba(255, 255, 255, 0.18);
-}
-
-.rsvp-message {
-  margin-top: 15px;
-  min-height: 20px;
-  font-size: 0.9rem;
-  text-shadow: 0 0 5px rgba(0,0,0,0.5);
-  color: #ffdddd;
-}
-
-/* Subtle Animations */
-@keyframes fadeInOverlay {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-@keyframes fadeUpCard {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-
-
-
-
-    </style>
+  <meta charset="UTF-8" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+  />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <title>Keirra & Brandon's Wedding</title>
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Raleway:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    /* Base */
+    body {
+      font-family: 'Raleway', sans-serif;
+      margin: 0;
+      padding: 0;
+      color: white;
+      text-align: center;
+      position: relative;
+      min-height: 100vh;
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      background-image: url('cavesBeachBackground.png');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+
+    header {
+      padding: 170px 20px 0 20px;
+      background-color: rgba(0, 0, 0, 0.4);
+    }
+    section {
+      padding: 40px 20px;
+      background-color: rgba(0, 0, 0, 0.4);
+    }
+    h1 {
+      font-family: 'Great Vibes', cursive;
+      font-size: 3rem;
+      color: white;
+      text-shadow: 0 0 10px rgba(0, 0, 0, 0.7);
+      word-spacing: 0.1em;
+    }
+    h2, p, li, button {
+      font-family: 'Raleway', sans-serif;
+      color: white;
+      text-shadow: 0 0 5px rgba(0, 0, 0, 0.7);
+    }
+
+    /* Countdown */
+    .countdown {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      margin-top: 20px;
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+      flex-wrap: nowrap;
+      padding: 0 5px;
+    }
+    .countdown-box {
+      background: rgba(255, 255, 255, 0.2);
+      padding: 6px;
+      border-radius: 8px;
+      flex: 1 1 22%;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+      animation: pulse 3s infinite ease-in-out;
+    }
+    .countdown-box .digit {
+      font-size: clamp(1rem, 4vw, 1.6rem);
+      font-weight: bold;
+      display: block;
+      line-height: 1;
+    }
+    .countdown-box .label {
+      font-size: clamp(0.6rem, 2vw, 0.8rem);
+      margin-top: 2px;
+    }
+
+    /* RSVP button */
+    .rsvp-button {
+      margin: 20px 0;
+      padding: 12px 24px;
+      font-size: 1.1rem;
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      border: 2px solid rgba(255, 255, 255, 0.6);
+      border-radius: 8px;
+      cursor: pointer;
+      backdrop-filter: blur(4px);
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+      text-shadow: 0 1px 2px rgba(0,0,0,0.6);
+      transition: all 0.3s ease;
+    }
+    .rsvp-button:hover {
+      background: rgba(255, 255, 255, 0.25);
+      border-color: white;
+      transform: scale(1.03);
+    }
+
+    /* Collage */
+    .photo-collage {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+    }
+    .photo-collage img {
+      width: 150px;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.4);
+    }
+
+    /* Entourage & misc */
+    .entourage ul {
+      list-style-type: none;
+      padding: 0;
+    }
+    .entourage li {
+      margin: 10px 0;
+    }
+    .faq, .attire, .reminders {
+      text-align: center;
+      max-width: 600px;
+      margin: auto;
+    }
+    .reminders ul {
+      list-style-position: inside;
+      display: inline-block;
+      text-align: left;
+      padding: 0;
+      margin: 0 auto;
+    }
+    .venue iframe {
+      width: 90%;
+      height: 300px;
+      border: none;
+    }
+
+    /* Seamless Carousel */
+    .carousel-container {
+      width: 600px;
+      margin: 0 auto;
+      overflow: hidden;       /* hide overflow for clean edges */
+      display: block;
+    }
+    .carousel-track {
+      display: flex;
+      gap: 20px;
+      padding: 20px 0;
+      width: max-content;     /* shrink to content; enables -50% trick */
+      will-change: transform;
+      transform: translate3d(0,0,0);
+      animation: marquee var(--marquee-duration, 30s) linear infinite;
+    }
+    .carousel-track img {
+      width: 180px;
+      height: 120px;
+      object-fit: contain;
+      border-radius: 12px;
+      flex: 0 0 auto;
+      opacity: 1;
+      transform: none;
+    }
+    @keyframes marquee {
+      0%   { transform: translate3d(0,0,0); }
+      100% { transform: translate3d(-50%,0,0); }
+    }
+
+    /* Song */
+    .our-song {
+      background-color: rgba(0, 0, 0, 0.4);
+      padding: 30px 20px;
+      text-align: center;
+    }
+    .our-song h2 {
+      font-family: 'Great Vibes', cursive;
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+    }
+    #playPauseBtn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 1rem;
+      padding: 10px 20px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 2px solid rgba(255, 255, 255, 0.5);
+      color: white;
+      border-radius: 10px;
+      cursor: pointer;
+      backdrop-filter: blur(6px);
+      box-shadow: 0 3px 8px rgba(0,0,0,0.3);
+      transition: all 0.3s ease;
+    }
+    #playPauseBtn:hover {
+      background: rgba(255, 255, 255, 0.18);
+      border-color: white;
+    }
+
+    /* Title letters */
+    .letter {
+      opacity: 0;
+      display: inline-block;
+      transform: translateY(20px);
+      animation: fadeUp 0.6s forwards;
+      text-shadow: 0 0 6px rgba(255, 255, 255, 0.8), 0 0 10px rgba(255, 255, 255, 0.6);
+    }
+    @keyframes fadeUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* RSVP Modal */
+    .rsvp-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.55);
+      backdrop-filter: blur(6px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      animation: fadeInOverlay 0.3s ease forwards;
+    }
+    .rsvp-card {
+      background: rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 18px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+      padding: 28px 36px;
+      width: min(90%, 400px);
+      color: #fff;
+      text-align: center;
+      animation: fadeUpCard 0.4s ease forwards;
+    }
+    .rsvp-title {
+      font-family: 'Great Vibes', cursive;
+      font-size: 2rem;
+      margin: 0 0 10px;
+      color: white;
+    }
+    .rsvp-subtitle {
+      font-size: 0.95rem;
+      opacity: 0.85;
+      margin-bottom: 18px;
+      line-height: 1.4;
+    }
+    .rsvp-input {
+      width: 100%;
+      padding: 12px 14px;
+      font-size: 1rem;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      background: rgba(255, 255, 255, 0.15);
+      color: white;
+      text-align: center;
+      outline: none;
+      transition: all 0.3s ease;
+    }
+    .rsvp-input::placeholder { color: rgba(255, 255, 255, 0.6); }
+    .rsvp-input:focus {
+      background: rgba(255, 255, 255, 0.25);
+      border-color: white;
+    }
+    .rsvp-buttons {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 18px;
+      gap: 10px;
+    }
+    .rsvp-confirm, .rsvp-cancel {
+      flex: 1;
+      padding: 10px 0;
+      font-size: 1rem;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.6);
+      color: white;
+      cursor: pointer;
+      backdrop-filter: blur(4px);
+      transition: all 0.3s ease;
+    }
+    .rsvp-confirm { background: rgba(255, 255, 255, 0.2); }
+    .rsvp-confirm:hover { background: rgba(255, 255, 255, 0.35); transform: scale(1.03); }
+    .rsvp-cancel { background: rgba(255, 255, 255, 0.08); }
+    .rsvp-cancel:hover { background: rgba(255, 255, 255, 0.18); }
+    .rsvp-message {
+      margin-top: 15px;
+      min-height: 20px;
+      font-size: 0.9rem;
+      text-shadow: 0 0 5px rgba(0,0,0,0.5);
+      color: #ffdddd;
+    }
+    @keyframes fadeInOverlay { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes fadeUpCard { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* Animations */
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50%      { transform: scale(1.05); }
+    }
+    .fade-in {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 1s ease, transform 1s ease;
+    }
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Media queries */
+    @media screen and (max-width: 400px) {
+      .countdown-box { flex: 1 1 40%; padding: 8px; margin: 0 auto; }
+      .countdown-box .digit { font-size: 1.5rem; }
+      .countdown-box .label { font-size: 0.8rem; }
+      .photo-collage img { width: 100px; height: 100px; }
+    }
+    @media screen and (min-width: 768px) {
+      .countdown-box {
+        padding: 10px 6px;
+        border-radius: 6px;
+        flex: 1 1 20%;
+        max-width: 160px;
+      }
+      .countdown-box .digit { font-size: 1.8rem; }
+      .countdown-box .label { font-size: 0.85rem; }
+    }
+    @media screen and (max-width: 600px) {
+      .carousel-container { width: 100%; padding: 10px; }
+      .carousel-track img { width: 100px; height: 150px; }
+    }
+
+    /* Accessibility */
+    @media (prefers-reduced-motion: reduce) {
+      .carousel-track { animation: none; }
+      .countdown-box { animation: none; }
+    }
+  </style>
 </head>
 <body>
-<header>
+  <header>
     <h1 id="weddingTitle"></h1>
-
     <div class="countdown">
-        <div class="countdown-box"><span class="digit" id="days">00</span><span class="label">DAYS</span></div>
-        <div class="countdown-box"><span class="digit" id="hours">00</span><span class="label">HOURS</span></div>
-        <div class="countdown-box"><span class="digit" id="minutes">00</span><span class="label">MINUTES</span></div>
-        <div class="countdown-box"><span class="digit" id="seconds">00</span><span class="label">SECONDS</span></div>
+      <div class="countdown-box"><span class="digit" id="days">00</span><span class="label">DAYS</span></div>
+      <div class="countdown-box"><span class="digit" id="hours">00</span><span class="label">HOURS</span></div>
+      <div class="countdown-box"><span class="digit" id="minutes">00</span><span class="label">MINUTES</span></div>
+      <div class="countdown-box"><span class="digit" id="seconds">00</span><span class="label">SECONDS</span></div>
     </div>
-</header>
+  </header>
 
-<section>
+  <section>
     <h2>You're Invited!</h2>
     <p>Join us for our special day by the sea.</p>
     <button class="rsvp-button" onclick="openRsvpModal()">💌 RSVP Now</button>
-</section>
+  </section>
 
-<section class="our-song">
-  <h2>Our Song</h2>
-  <button id="playPauseBtn" aria-label="Play">
-  <span id="iconContainer">
-    <svg width="22" height="22" viewBox="0 0 24 24" fill="#fff" xmlns="http://www.w3.org/2000/svg">
-      <path d="M8 5v14l11-7z"/>
-    </svg>
-  </span>
-  <span style="margin-left: 8px;">Play</span>
-</button>
+  <section class="our-song">
+    <h2>Our Song</h2>
+    <button id="playPauseBtn" aria-label="Play">
+      <span id="iconContainer">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="#fff" xmlns="http://www.w3.org/2000/svg"><path d="M8 5v14l11-7z"/></svg>
+      </span>
+      <span style="margin-left: 8px;">Play</span>
+    </button>
+    <audio id="weddingSong" src="ourSong.mp3"></audio>
+  </section>
 
-  <audio id="weddingSong" src="ourSong.mp3"></audio>
-</section>
-
-
-<section class="photo-showcase">
+  <section class="photo-showcase">
     <h2>Our Journey</h2>
     <div class="carousel-container">
-        <div class="carousel-track">
-            <img src="photo2.jpg" alt="2" />
-            <img src="photo3.jpg" alt="3" />
-            <img src="photo4.jpg" alt="4" />
-        </div>
+      <div class="carousel-track">
+        <img src="photo2.jpg" alt="2" />
+        <img src="photo3.jpg" alt="3" />
+        <img src="photo4.jpg" alt="4" />
+      </div>
     </div>
-</section>
+  </section>
 
-
-
-<section class="entourage fade-in">
+  <section class="entourage fade-in">
     <h2>The Entourage</h2>
     <ul>
-        <li>Best Man: Best Man Guy</li>
-        <li>Maid of Honor: Maid of Honor Girl</li>
-        <li>Bridesmaids: Random Girl 1, Random Girl 2</li>
-        <li>Groomsmen: Random Guy 1, Random Guy 2</li>
+      <li>Best Man: Best Man Guy</li>
+      <li>Maid of Honor: Maid of Honor Girl</li>
+      <li>Bridesmaids: Random Girl 1, Random Girl 2</li>
+      <li>Groomsmen: Random Guy 1, Random Guy 2</li>
     </ul>
-</section>
+  </section>
 
-<section class="faq fade-in">
+  <section class="faq fade-in">
     <h2>FAQ</h2>
     <p><strong>What time should I arrive?</strong><br> Please arrive by 3:45 PM.</p>
     <p><strong>Is the venue accessible?</strong><br> Yes, it is wheelchair-friendly.</p>
     <p><strong>Can I bring a guest?</strong><br> Only guests listed on the invite.</p>
-</section>
+  </section>
 
-<section class="attire fade-in">
+  <section class="attire fade-in">
     <h2>Attire</h2>
     <p>Beach formal: Linen, sundresses, and comfy sandals. Avoid heels etc.</p>
-</section>
+  </section>
 
-<section class="reminders fade-in">
+  <section class="reminders fade-in">
     <h2>Reminders</h2>
     <ul>
-        <li>No boxed gifts, please – envelopes only.</li>
-        <li>Adults-only event – thank you for understanding.</li>
-        <li>Arrive early to enjoy the view.</li>
+      <li>No boxed gifts, please – envelopes only.</li>
+      <li>Adults-only event – thank you for understanding.</li>
+      <li>Arrive early to enjoy the view.</li>
     </ul>
-</section>
+  </section>
 
-<section class="venue fade-in">
+  <section class="venue fade-in">
     <h2>Venue</h2>
     <p>Caves Coastal, Newcastle, Caves Beach</p>
-    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3342.163814416935!2d151.64319987809841!3d-33.10477691502382!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6b732164f44dc649%3A0x44b652f79ce27b40!2sCaves%20Coastal%20Bar%20and%20Bungalows!5e0!3m2!1sen!2sau!4v1750324293190!5m2!1sen!2sau" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></section>
+    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3342.163814416935!2d151.64319987809841!3d-33.10477691502382!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6b732164f44dc649%3A0x44b652f79ce27b40!2sCaves%20Coastal%20Bar%20and%20Bungalows!5e0!3m2!1sen!2sau!4v1750324293190!5m2!1sen!2sau" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+  </section>
 
-   <footer style="padding: 20px; text-align: center; background-color: rgba(0,0,0,0.3); color: white;">
-  <p>#KeirraAndBrandon2026 • 📍 
-    <a href="https://www.google.com/maps/place/Caves+Coastal+Bar+and+Bungalows/@-33.1047769,151.6457744,17z" target="_blank" rel="noopener noreferrer" style="color: #fff; text-decoration: underline;">
-      Caves Beach Venue
-    </a>
-  </p>
-</footer>
+  <footer style="padding: 20px; text-align: center; background-color: rgba(0,0,0,0.3); color: white;">
+    <p>#KeirraAndBrandon2026 • 📍
+      <a href="https://www.google.com/maps/place/Caves+Coastal+Bar+and+Bungalows/@-33.1047769,151.6457744,17z" target="_blank" rel="noopener noreferrer" style="color: #fff; text-decoration: underline;">
+        Caves Beach Venue
+      </a>
+    </p>
+  </footer>
 
-<!-- RSVP Modal (Updated Style) -->
-<div id="rsvpModal" class="rsvp-overlay">
-  <div class="rsvp-card">
-    <h2 class="rsvp-title">Find  Your  RSVP</h2>
-    <p class="rsvp-subtitle">Enter the code printed under your QR<br></p>
-
-    <input id="rsvpCodeInput" placeholder="Enter your code" class="rsvp-input" />
-
-    <div class="rsvp-buttons">
-      <button onclick="submitRsvpCode()" class="rsvp-confirm">Continue</button>
-      <button onclick="closeRsvpModal()" class="rsvp-cancel">Cancel</button>
+  <!-- RSVP Modal -->
+  <div id="rsvpModal" class="rsvp-overlay" role="dialog" aria-modal="true" aria-labelledby="rsvpTitle">
+    <div class="rsvp-card">
+      <h2 id="rsvpTitle" class="rsvp-title">Find&nbsp;Your&nbsp;RSVP</h2>
+      <p class="rsvp-subtitle">Enter the code printed under your QR</p>
+      <input id="rsvpCodeInput" placeholder="Enter your code" class="rsvp-input" />
+      <div class="rsvp-buttons">
+        <button onclick="submitRsvpCode()" class="rsvp-confirm">Continue</button>
+        <button onclick="closeRsvpModal()" class="rsvp-cancel">Cancel</button>
+      </div>
+      <div id="rsvpMsg" class="rsvp-message"></div>
     </div>
-
-    <div id="rsvpMsg" class="rsvp-message"></div>
   </div>
-</div>
 
-
-<script>
+  <!-- Countdown -->
+  <script>
     const weddingDate = new Date("2026-02-07T16:00:00").getTime();
-
     const updateCountdown = () => {
       const now = new Date().getTime();
       const distance = weddingDate - now;
@@ -556,7 +457,6 @@
         document.querySelector('.countdown').innerHTML = "We're Married! 💍";
         return;
       }
-
       const days = Math.floor(distance / (1000 * 60 * 60 * 24));
       const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
       const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
@@ -567,159 +467,141 @@
       document.getElementById("minutes").innerText = String(minutes).padStart(2, '0');
       document.getElementById("seconds").innerText = String(seconds).padStart(2, '0');
     };
-
     updateCountdown();
     setInterval(updateCountdown, 1000);
+  </script>
 
-
-</script>
-
-<script>
-    const carousel = document.querySelector(".carousel-container");
+  <!-- Seamless Carousel Setup -->
+  <script>
     const track = document.querySelector(".carousel-track");
 
-    // 🌀 Unified continuous flow for all devices
-    let offset = 0;
-    const speed = 0.8; // Adjust speed (0.2 = slow, 0.5 = faster)
+    // Duplicate children once so the second half equals the first (for seamless wrap)
+    const clones = Array.from(track.children).map(n => n.cloneNode(true));
+    track.append(...clones);
 
-    // Duplicate track content for infinite loop effect
-    track.innerHTML += track.innerHTML;
-
-    function animate() {
-      offset += speed;
-      if (offset >= track.scrollWidth / 2) {
-        offset = 0;
-      }
-      track.style.transform = `translateX(-${offset}px)`;
-      requestAnimationFrame(animate);
+    // Compute duration so speed is consistent regardless of content width
+    const PX_PER_SEC = 50; // adjust for taste
+    // After cloning, half of scrollWidth is the original content width
+    function setMarqueeDuration() {
+      const halfWidth = track.scrollWidth / 2;
+      const duration = halfWidth / PX_PER_SEC; // seconds to travel -50%
+      track.style.setProperty('--marquee-duration', `${duration}s`);
     }
+    // Initial and after images load (in case of late image sizing)
+    setMarqueeDuration();
+    window.addEventListener('load', setMarqueeDuration);
+    window.addEventListener('resize', setMarqueeDuration);
+  </script>
 
-    track.style.willChange = "transform";
-    track.style.transition = "none";
-    requestAnimationFrame(animate);
-</script>
+  <!-- Play/Pause for Song -->
+  <script>
+    const audio = document.getElementById("weddingSong");
+    const button = document.getElementById("playPauseBtn");
+    const iconContainer = document.getElementById("iconContainer");
+    const playIcon = `
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="#fff" xmlns="http://www.w3.org/2000/svg">
+        <path d="M8 5v14l11-7z"/>
+      </svg>`;
+    const pauseIcon = `
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="#fff" xmlns="http://www.w3.org/2000/svg">
+        <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+      </svg>`;
 
-<script>
-const audio = document.getElementById("weddingSong");
-const button = document.getElementById("playPauseBtn");
-const iconContainer = document.getElementById("iconContainer");
-
-const playIcon = `
-  <svg width="22" height="22" viewBox="0 0 24 24" fill="#fff" xmlns="http://www.w3.org/2000/svg">
-    <path d="M8 5v14l11-7z"/>
-  </svg>`;
-const pauseIcon = `
-  <svg width="22" height="22" viewBox="0 0 24 24" fill="#fff" xmlns="http://www.w3.org/2000/svg">
-    <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
-  </svg>`;
-
-button.addEventListener("click", () => {
-  if (audio.paused) {
-    audio.play();
-    iconContainer.innerHTML = pauseIcon;
-    button.querySelector("span:last-child").textContent = "Pause";
-  } else {
-    audio.pause();
-    iconContainer.innerHTML = playIcon;
-    button.querySelector("span:last-child").textContent = "Play";
-  }
-});
-
-</script>
-
-
-<script>
-  const faders = document.querySelectorAll('.fade-in');
-
-  const appearOnScroll = new IntersectionObserver((entries, observer) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-        observer.unobserve(entry.target); // Only fade in once
+    button.addEventListener("click", () => {
+      if (audio.paused) {
+        audio.play();
+        iconContainer.innerHTML = pauseIcon;
+        button.querySelector("span:last-child").textContent = "Pause";
+      } else {
+        audio.pause();
+        iconContainer.innerHTML = playIcon;
+        button.querySelector("span:last-child").textContent = "Play";
       }
     });
-  }, {
-    threshold: 0.1
-  });
+  </script>
 
-  faders.forEach(fader => {
-    appearOnScroll.observe(fader);
-  });
-</script>
+  <!-- Fade-in on Scroll -->
+  <script>
+    const faders = document.querySelectorAll('.fade-in');
+    const appearOnScroll = new IntersectionObserver((entries, observer) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    faders.forEach(fader => appearOnScroll.observe(fader));
+  </script>
 
-<script>
-  const titleText = "Keirra's & Brandon's Wedding";
-  const titleElement = document.getElementById("weddingTitle");
+  <!-- Animated Title -->
+  <script>
+    const titleText = "Keirra & Brandon's Wedding";
+    const titleElement = document.getElementById("weddingTitle");
+    titleElement.innerHTML = titleText
+      .split("")
+      .map((char, i) => `<span class="letter" style="animation-delay: ${i * 0.08}s">${char === " " ? "&nbsp;" : char}</span>`)
+      .join("");
+  </script>
 
-  titleElement.innerHTML = titleText
-    .split("")
-    .map((char, i) =>
-      `<span class="letter" style="animation-delay: ${i * 0.08}s">${char === " " ? "&nbsp;" : char}</span>`
-    ).join("");
-</script>
-
-    <script>
-  // Modal controls
-  function openRsvpModal(){
-    document.getElementById('rsvpMsg').textContent = '';
-    document.getElementById('rsvpCodeInput').value = '';
-    document.getElementById('rsvpModal').style.display = 'flex';
-    setTimeout(()=>document.getElementById('rsvpCodeInput').focus(),50);
-  }
-  function closeRsvpModal(){ document.getElementById('rsvpModal').style.display = 'none'; }
-
-  // Helpers
-  function norm(s){ return (s||'').toString().trim().toLowerCase(); }
-  function getQuery(k){ return new URLSearchParams(location.search).get(k) || ''; }
-
-  async function loadGuests(){
-    // cache-buster while iterating; remove ?ts= once stable
-    const res = await fetch('./guests.json?ts=' + Date.now(), { cache: 'no-store' });
-    if(!res.ok) throw new Error('Could not load guests.json');
-    return res.json();
-  }
-
-  async function routeByCode(code){
-    const msg = document.getElementById('rsvpMsg');
-    try{
-      const guests = await loadGuests();
-      const match = guests.find(g => norm(g.code) === norm(code));
-      if(!match){ msg.textContent = 'Code not found. Please check the code on your invitation and try again.'; return; }
-      msg.style.color = '#0a5';
-      msg.textContent = 'Redirecting to RSVP…';
-      window.location.href = match.formUrl;  // send to With+1 or No+1 form
-    }catch(e){
-      console.error(e);
-      msg.textContent = 'There was a problem loading the RSVP. Please try again.';
+  <!-- RSVP Logic -->
+  <script>
+    function openRsvpModal(){
+      document.getElementById('rsvpMsg').textContent = '';
+      document.getElementById('rsvpCodeInput').value = '';
+      document.getElementById('rsvpModal').style.display = 'flex';
+      setTimeout(()=>document.getElementById('rsvpCodeInput').focus(),50);
     }
-  }
+    function closeRsvpModal(){ document.getElementById('rsvpModal').style.display = 'none'; }
+    function norm(s){ return (s||'').toString().trim().toLowerCase(); }
+    function getQuery(k){ return new URLSearchParams(location.search).get(k) || ''; }
 
-  function submitRsvpCode(){
-    const code = document.getElementById('rsvpCodeInput').value;
-    if(!code){ document.getElementById('rsvpMsg').textContent = 'Please enter your code.'; return; }
-    routeByCode(code);
-  }
+    async function loadGuests(){
+      const res = await fetch('./guests.json?ts=' + Date.now(), { cache: 'no-store' });
+      if(!res.ok) throw new Error('Could not load guests.json');
+      return res.json();
+    }
 
-  // Optional: auto-detect ?code= on the landing URL for instant routing
-  (function(){
-    const c = getQuery('code');
-    if(c){ openRsvpModal(); document.getElementById('rsvpCodeInput').value = c; submitRsvpCode(); }
-  })();
+    async function routeByCode(code){
+      const msg = document.getElementById('rsvpMsg');
+      try{
+        const guests = await loadGuests();
+        const match = guests.find(g => norm(g.code) === norm(code));
+        if(!match){
+          msg.style.color = '#ffdddd';
+          msg.textContent = 'Code not found. Please check the code on your invitation and try again.';
+          return;
+        }
+        msg.style.color = '#0a5';
+        msg.textContent = 'Redirecting to RSVP…';
+        window.location.href = match.formUrl;  // send to With+1 or No+1 form
+      }catch(e){
+        console.error(e);
+        msg.style.color = '#ffdddd';
+        msg.textContent = 'There was a problem loading the RSVP. Please try again.';
+      }
+    }
 
-  // Keyboard niceties
-  document.addEventListener('keydown', (e) => {
-    const modal = document.getElementById('rsvpModal');
-    if(modal.style.display === 'flex' && e.key === 'Enter') submitRsvpCode();
-    if(modal.style.display === 'flex' && e.key === 'Escape') closeRsvpModal();
-  });
-</script>
+    function submitRsvpCode(){
+      const code = document.getElementById('rsvpCodeInput').value;
+      if(!code){
+        document.getElementById('rsvpMsg').style.color = '#ffdddd';
+        document.getElementById('rsvpMsg').textContent = 'Please enter your code.';
+        return;
+      }
+      routeByCode(code);
+    }
 
+    (function(){
+      const c = getQuery('code');
+      if(c){ openRsvpModal(); document.getElementById('rsvpCodeInput').value = c; submitRsvpCode(); }
+    })();
 
-
+    document.addEventListener('keydown', (e) => {
+      const modal = document.getElementById('rsvpModal');
+      if(modal.style.display === 'flex' && e.key === 'Enter') submitRsvpCode();
+      if(modal.style.display === 'flex' && e.key === 'Escape') closeRsvpModal();
+    });
+  </script>
 </body>
 </html>
-
-
-
-
-
