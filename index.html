@@ -201,18 +201,18 @@
   }
 }
 
-/* Carousel container: hide overflow, no scroll, no snap */
+/* Carousel container: hide overflow and stop snapping */
 .carousel-container {
   width: 600px;
   margin: 0 auto;
-  overflow: hidden;          /* ⬅️ important: no scrolling */
-  display: block;            /* no flex centering */
+  overflow: hidden;   /* ⬅️ no scroll, no gap flashes */
+  display: block;
 }
 
-/* Track: GPU-friendly transform */
+/* Track: flex row that we translate with the GPU */
 .carousel-track {
   display: flex;
-  gap: 20px;
+  gap: 20px;          /* keep your spacing */
   padding: 20px 0;
   will-change: transform;
   transform: translate3d(0,0,0);
@@ -221,12 +221,10 @@
 /* Images */
 .carousel-track img {
   width: 180px;
-  height: 120px;             /* (you had a stray “Add commentMore actions” here) */
+  height: 120px;      /* (removed the stray “Add commentMore actions”) */
   object-fit: contain;
   border-radius: 12px;
-  flex-shrink: 0;            /* prevents shrinking */
-  opacity: 1;
-  transform: none;
+  flex: 0 0 auto;     /* don’t shrink */
 }
 
 /* Mobile tweaks */
@@ -240,6 +238,7 @@
     height: 150px;
   }
 }
+
 
 
 @keyframes pulse {
@@ -579,27 +578,39 @@
     const container = document.querySelector(".carousel-container");
     const track = document.querySelector(".carousel-track");
 
-    const PX_PER_SEC = 50;   // 💡 speed control (pixels/second). Tweak to taste.
-    let firstSetWidth = 0;   // width of the original (non-cloned) set
-    let animId = 0;
+    const SPEED_PX_PER_SEC = 50;   // tweak to taste
+    let firstSetWidth = 0;
+    let raf = 0;
 
-    function buildMarquee() {
-      cancelAnimationFrame(animId);
+    function measureGapPx() {
+      const cs = getComputedStyle(track);
+      const g = cs.gap || cs.columnGap || "0px";
+      return parseFloat(g) || 0;
+    }
 
-      // 1) Keep originals and drop previous clones
+    function build() {
+      cancelAnimationFrame(raf);
+
+      // 1) Keep originals; remove old clones
       const originals = Array.from(track.children).filter(n => n.getAttribute("data-clone") !== "1");
       track.innerHTML = "";
       originals.forEach(n => track.appendChild(n));
 
-      // 2) Measure the width of the first set (after images have sizes)
+      // 2) Measure first set width (images need sizes by now)
       firstSetWidth = track.scrollWidth;
 
-      // 3) Clone until we cover firstSetWidth + containerWidth + one image
+      // 3) Ensure there is at least containerWidth worth of content AFTER the first set.
+      //    This guarantees no empty area is ever visible as we approach the wrap point.
       const containerWidth = container.clientWidth;
       const oneItemWidth = originals[0]?.getBoundingClientRect().width || 0;
+      const gapPx = measureGapPx();
 
+      // Buffer: one item + one gap to cover half-visible cases and rounding
+      const buffer = oneItemWidth + gapPx + 2;
+
+      // Keep cloning the originals until (totalWidth - firstSetWidth) >= (containerWidth + buffer)
       let total = track.scrollWidth;
-      while (total < firstSetWidth + containerWidth + oneItemWidth) {
+      while ((total - firstSetWidth) < (containerWidth + buffer)) {
         originals.forEach(n => {
           const c = n.cloneNode(true);
           c.setAttribute("data-clone", "1");
@@ -608,50 +619,54 @@
         total = track.scrollWidth;
       }
 
-      // 4) Start animation
       start();
     }
 
     function start() {
-      let x = 0;           // current translateX in px
+      let x = 0;
       let last = performance.now();
 
       function step(now) {
-        const dt = (now - last) / 1000;   // seconds
+        const dt = (now - last) / 1000;
         last = now;
 
-        x += PX_PER_SEC * dt;
+        x += SPEED_PX_PER_SEC * dt;
+
+        // Wrap precisely at the width of the first set
         if (x >= firstSetWidth) {
-          // wrap seamlessly at EXACTLY one original set
+          // subtract instead of set 0 to avoid accumulating FP error
           x -= firstSetWidth;
         }
 
-        track.style.transform = `translate3d(${-x}px, 0, 0)`;
-        animId = requestAnimationFrame(step);
+        track.style.transform = `translate3d(${-x}px,0,0)`;
+        raf = requestAnimationFrame(step);
       }
-      animId = requestAnimationFrame(step);
+
+      raf = requestAnimationFrame(step);
     }
 
-    // Build once ready; rebuild on load/resize or late image load
+    // Build after images have sizes (handles cache misses), and on resize
     function initAfterImages() {
       const imgs = track.querySelectorAll("img");
       let pending = imgs.length;
-      if (pending === 0) { buildMarquee(); return; }
+      if (pending === 0) { build(); return; }
 
       imgs.forEach(img => {
         if (img.complete) {
-          if (--pending === 0) buildMarquee();
+          if (--pending === 0) build();
         } else {
-          img.addEventListener("load", () => { if (--pending === 0) buildMarquee(); }, { once: true });
-          img.addEventListener("error", () => { if (--pending === 0) buildMarquee(); }, { once: true });
+          const done = () => { if (--pending === 0) build(); };
+          img.addEventListener("load", done, { once: true });
+          img.addEventListener("error", done, { once: true });
         }
       });
     }
 
     window.addEventListener("load", initAfterImages);
-    window.addEventListener("resize", buildMarquee);
+    window.addEventListener("resize", build);
   })();
 </script>
+
 
 
 <script>
@@ -773,6 +788,7 @@ button.addEventListener("click", () => {
 
 </body>
 </html>
+
 
 
 
