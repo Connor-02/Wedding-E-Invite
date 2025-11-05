@@ -158,7 +158,7 @@
       display: flex;
       gap: 20px;
       padding: 20px 0;
-      width: max-content;     /* shrink to content; enables -50% trick */
+      width: max-content;     /* shrink to content; enables translate trick */
       will-change: transform;
       transform: translate3d(0,0,0);
       animation: marquee var(--marquee-duration, 30s) linear infinite;
@@ -172,9 +172,11 @@
       opacity: 1;
       transform: none;
     }
+
+    /* Use dynamic distance (JS sets --marquee-shift to first-set width) */
     @keyframes marquee {
-      0%   { transform: translate3d(0,0,0); }
-      100% { transform: translate3d(-50%,0,0); }
+      0%   { transform: translate3d(0, 0, 0); }
+      100% { transform: translate3d(calc(var(--marquee-shift) * -1), 0, 0); }
     }
 
     /* Song */
@@ -380,6 +382,7 @@
     <h2>Our Journey</h2>
     <div class="carousel-container">
       <div class="carousel-track">
+        <img src="photo1.jpg" alt="1" />
         <img src="photo2.jpg" alt="2" />
         <img src="photo3.jpg" alt="3" />
         <img src="photo4.jpg" alt="4" />
@@ -471,26 +474,58 @@
     setInterval(updateCountdown, 1000);
   </script>
 
-  <!-- Seamless Carousel Setup -->
+  <!-- Seamless Carousel Setup (no-gap, any number of images) -->
   <script>
-    const track = document.querySelector(".carousel-track");
+    (function () {
+      const container = document.querySelector(".carousel-container");
+      const track = document.querySelector(".carousel-track");
 
-    // Duplicate children once so the second half equals the first (for seamless wrap)
-    const clones = Array.from(track.children).map(n => n.cloneNode(true));
-    track.append(...clones);
+      const PX_PER_SEC = 50; // Adjust speed (px/sec)
 
-    // Compute duration so speed is consistent regardless of content width
-    const PX_PER_SEC = 50; // adjust for taste
-    // After cloning, half of scrollWidth is the original content width
-    function setMarqueeDuration() {
-      const halfWidth = track.scrollWidth / 2;
-      const duration = halfWidth / PX_PER_SEC; // seconds to travel -50%
-      track.style.setProperty('--marquee-duration', `${duration}s`);
-    }
-    // Initial and after images load (in case of late image sizing)
-    setMarqueeDuration();
-    window.addEventListener('load', setMarqueeDuration);
-    window.addEventListener('resize', setMarqueeDuration);
+      function buildMarquee() {
+        // 1) Keep originals, remove previous clones
+        const originals = Array.from(track.children).filter(n => n.getAttribute("data-clone") !== "1");
+        track.innerHTML = "";
+        originals.forEach(n => track.appendChild(n));
+
+        // 2) Measure first-set width (originals only)
+        const firstSetWidth = track.scrollWidth;
+
+        // 3) Clone until total width >= firstSetWidth + containerWidth + oneItemWidth
+        const containerWidth = container.clientWidth;
+        const oneItemWidth = originals[0]?.getBoundingClientRect().width || 0;
+
+        let total = track.scrollWidth;
+        while (total < firstSetWidth + containerWidth + oneItemWidth) {
+          originals.forEach(n => {
+            const c = n.cloneNode(true);
+            c.setAttribute("data-clone", "1");
+            track.appendChild(c);
+          });
+          total = track.scrollWidth;
+        }
+
+        // 4) Set CSS variables for distance and duration
+        const duration = firstSetWidth / PX_PER_SEC; // seconds to translate exactly one set
+        track.style.setProperty("--marquee-shift", firstSetWidth + "px");
+        track.style.setProperty("--marquee-duration", duration + "s");
+      }
+
+      function onReadyOnce() {
+        buildMarquee();
+        // Rebuild after images load (in case sizes change after load)
+        const imgs = track.querySelectorAll("img");
+        let pending = imgs.length;
+        if (pending === 0) return;
+        imgs.forEach(img => {
+          if (img.complete) { if (--pending === 0) buildMarquee(); }
+          else img.addEventListener("load", () => { if (--pending === 0) buildMarquee(); }, { once: true });
+        });
+      }
+
+      window.addEventListener("load", onReadyOnce);
+      window.addEventListener("resize", buildMarquee);
+    })();
   </script>
 
   <!-- Play/Pause for Song -->
