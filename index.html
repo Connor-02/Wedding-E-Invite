@@ -220,12 +220,19 @@
 
 /* Images */
 .carousel-track img {
-  border-radius: 14px;        /* your preferred radius */
-  display: block;             /* avoid inline-img gaps */
-  clip-path: inset(0 round 14px); /* hard-clip the corners */
-  -webkit-clip-path: inset(0 round 14px); /* Safari */
-  background-color: rgba(255,255,255,0.02); /* optional: subtle backdrop for 'contain' */
+  width: 180px;
+  height: 120px;
+  object-fit: cover;            /* fills the box neatly */
+  border-radius: 14px;          /* consistent rounding */
+  flex-shrink: 0;
+  display: block;
+  overflow: hidden;             /* keeps corners clean */
+  background-color: rgba(255,255,255,0.05);
+  /* hard-clip the image to the rounded corner shape */
+  clip-path: inset(0 round 14px);
+  -webkit-clip-path: inset(0 round 14px);
 }
+
 
 /* Mobile tweaks */
 @media screen and (max-width: 600px) {
@@ -788,6 +795,7 @@ button.addEventListener("click", () => {
 
 </body>
 </html>
+
 
 
 
