@@ -220,11 +220,11 @@
 
 /* Images */
 .carousel-track img {
-  width: 180px;
-  height: 120px;      /* (removed the stray “Add commentMore actions”) */
-  object-fit: contain;
-  border-radius: 12px;
-  flex: 0 0 auto;     /* don’t shrink */
+  border-radius: 14px;        /* your preferred radius */
+  display: block;             /* avoid inline-img gaps */
+  clip-path: inset(0 round 14px); /* hard-clip the corners */
+  -webkit-clip-path: inset(0 round 14px); /* Safari */
+  background-color: rgba(255,255,255,0.02); /* optional: subtle backdrop for 'contain' */
 }
 
 /* Mobile tweaks */
@@ -578,7 +578,7 @@
     const container = document.querySelector(".carousel-container");
     const track = document.querySelector(".carousel-track");
 
-    const SPEED_PX_PER_SEC = 50;   // tweak to taste
+    const SPEED_PX_PER_SEC = 105;   // tweak to taste
     let firstSetWidth = 0;
     let raf = 0;
 
@@ -788,6 +788,7 @@ button.addEventListener("click", () => {
 
 </body>
 </html>
+
 
 
 
