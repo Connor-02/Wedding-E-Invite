@@ -201,49 +201,46 @@
   }
 }
 
+/* Carousel container: hide overflow, no scroll, no snap */
 .carousel-container {
-  width: 600px; /* only 3 images fit */
+  width: 600px;
   margin: 0 auto;
-  overflow-x: scroll;
-  scroll-snap-type: x mandatory;
-  display: flex;
-  justify-content: center;
-  scroll-behavior: smooth;
-  scrollbar-width: none;
-}
-.carousel-container::-webkit-scrollbar {
-  display: none;
+  overflow: hidden;          /* ⬅️ important: no scrolling */
+  display: block;            /* no flex centering */
 }
 
+/* Track: GPU-friendly transform */
 .carousel-track {
   display: flex;
   gap: 20px;
   padding: 20px 0;
+  will-change: transform;
+  transform: translate3d(0,0,0);
 }
 
+/* Images */
 .carousel-track img {
   width: 180px;
-  height: 120px;Add commentMore actions
+  height: 120px;             /* (you had a stray “Add commentMore actions” here) */
   object-fit: contain;
   border-radius: 12px;
-  flex-shrink: 0;
-  scroll-snap-align: center;
+  flex-shrink: 0;            /* prevents shrinking */
   opacity: 1;
   transform: none;
 }
 
-
-        @media screen and (max-width: 600px) {
+/* Mobile tweaks */
+@media screen and (max-width: 600px) {
   .carousel-container {
-    width: 100%; /* Full width on mobile */
+    width: 100%;
     padding: 10px 10px;
   }
-
   .carousel-track img {
-    width: 100px; /* Smaller image */
+    width: 100px;
     height: 150px;
   }
 }
+
 
 @keyframes pulse {
   0%, 100% {
@@ -578,29 +575,84 @@
 </script>
 
 <script>
-    const carousel = document.querySelector(".carousel-container");
+  (function () {
+    const container = document.querySelector(".carousel-container");
     const track = document.querySelector(".carousel-track");
 
-    // 🌀 Unified continuous flow for all devices
-    let offset = 0;
-    const speed = 0.8; // Adjust speed (0.2 = slow, 0.5 = faster)
+    const PX_PER_SEC = 50;   // 💡 speed control (pixels/second). Tweak to taste.
+    let firstSetWidth = 0;   // width of the original (non-cloned) set
+    let animId = 0;
 
-    // Duplicate track content for infinite loop effect
-    track.innerHTML += track.innerHTML;
+    function buildMarquee() {
+      cancelAnimationFrame(animId);
 
-    function animate() {
-      offset += speed;
-      if (offset >= track.scrollWidth / 2) {
-        offset = 0;
+      // 1) Keep originals and drop previous clones
+      const originals = Array.from(track.children).filter(n => n.getAttribute("data-clone") !== "1");
+      track.innerHTML = "";
+      originals.forEach(n => track.appendChild(n));
+
+      // 2) Measure the width of the first set (after images have sizes)
+      firstSetWidth = track.scrollWidth;
+
+      // 3) Clone until we cover firstSetWidth + containerWidth + one image
+      const containerWidth = container.clientWidth;
+      const oneItemWidth = originals[0]?.getBoundingClientRect().width || 0;
+
+      let total = track.scrollWidth;
+      while (total < firstSetWidth + containerWidth + oneItemWidth) {
+        originals.forEach(n => {
+          const c = n.cloneNode(true);
+          c.setAttribute("data-clone", "1");
+          track.appendChild(c);
+        });
+        total = track.scrollWidth;
       }
-      track.style.transform = `translateX(-${offset}px)`;
-      requestAnimationFrame(animate);
+
+      // 4) Start animation
+      start();
     }
 
-    track.style.willChange = "transform";
-    track.style.transition = "none";
-    requestAnimationFrame(animate);
+    function start() {
+      let x = 0;           // current translateX in px
+      let last = performance.now();
+
+      function step(now) {
+        const dt = (now - last) / 1000;   // seconds
+        last = now;
+
+        x += PX_PER_SEC * dt;
+        if (x >= firstSetWidth) {
+          // wrap seamlessly at EXACTLY one original set
+          x -= firstSetWidth;
+        }
+
+        track.style.transform = `translate3d(${-x}px, 0, 0)`;
+        animId = requestAnimationFrame(step);
+      }
+      animId = requestAnimationFrame(step);
+    }
+
+    // Build once ready; rebuild on load/resize or late image load
+    function initAfterImages() {
+      const imgs = track.querySelectorAll("img");
+      let pending = imgs.length;
+      if (pending === 0) { buildMarquee(); return; }
+
+      imgs.forEach(img => {
+        if (img.complete) {
+          if (--pending === 0) buildMarquee();
+        } else {
+          img.addEventListener("load", () => { if (--pending === 0) buildMarquee(); }, { once: true });
+          img.addEventListener("error", () => { if (--pending === 0) buildMarquee(); }, { once: true });
+        }
+      });
+    }
+
+    window.addEventListener("load", initAfterImages);
+    window.addEventListener("resize", buildMarquee);
+  })();
 </script>
+
 
 <script>
 const audio = document.getElementById("weddingSong");
@@ -721,6 +773,7 @@ button.addEventListener("click", () => {
 
 </body>
 </html>
+
 
 
 
