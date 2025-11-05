@@ -342,6 +342,57 @@
       .carousel-container { width: 100%; padding: 10px; }
       .carousel-track img { width: 100px; height: 150px; }
     }
+    /* === 3D Rotating Carousel === */
+.carousel3d-wrap{
+  width: min(640px, 90vw);
+  height: 180px;          /* image height */
+  margin: 0 auto;
+  perspective: 1000px;    /* gives 3D depth */
+  overflow: visible;
+}
+
+.carousel3d{
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  animation: spin var(--spin-duration, 18s) linear infinite;
+  will-change: transform;
+}
+
+.carousel3d img{
+  position: absolute;
+  top: 0; left: 50%;
+  width: 180px;           /* image width */
+  height: 120px;          /* image height */
+  object-fit: cover;
+  border-radius: 12px;
+  transform-style: preserve-3d;
+  box-shadow: 0 6px 14px rgba(0,0,0,0.35);
+}
+
+/* spin animation */
+@keyframes spin{
+  from{ transform: rotateY(0deg); }
+  to  { transform: rotateY(-360deg); }
+}
+
+/* Slower on hover (optional, feels nice on desktop) */
+.carousel3d-wrap:hover .carousel3d{
+  animation-duration: calc(var(--spin-duration, 18s) * 1.5);
+}
+
+/* Mobile tweaks */
+@media (max-width: 600px){
+  .carousel3d-wrap{ height: 150px; }
+  .carousel3d img{ width: 120px; height: 90px; }
+}
+
+/* Respect users who prefer less motion */
+@media (prefers-reduced-motion: reduce){
+  .carousel3d{ animation: none; }
+}
+
 
     /* Accessibility */
     @media (prefers-reduced-motion: reduce) {
@@ -379,16 +430,17 @@
   </section>
 
   <section class="photo-showcase">
-    <h2>Our Journey</h2>
-    <div class="carousel-container">
-      <div class="carousel-track">
-        <img src="photo1.jpg" alt="1" />
-        <img src="photo2.jpg" alt="2" />
-        <img src="photo3.jpg" alt="3" />
-        <img src="photo4.jpg" alt="4" />
-      </div>
+  <h2>Our Journey</h2>
+  <div class="carousel3d-wrap">
+    <div class="carousel3d" id="carousel3d">
+      <img src="photo1.jpg" alt="1" />
+      <img src="photo2.jpg" alt="2" />
+      <img src="photo3.jpg" alt="3" />
+      <img src="photo4.jpg" alt="4" />
     </div>
-  </section>
+  </div>
+</section>
+
 
   <section class="entourage fade-in">
     <h2>The Entourage</h2>
@@ -474,59 +526,49 @@
     setInterval(updateCountdown, 1000);
   </script>
 
-  <!-- Seamless Carousel Setup (no-gap, any number of images) -->
-  <script>
-    (function () {
-      const container = document.querySelector(".carousel-container");
-      const track = document.querySelector(".carousel-track");
+ <script>
+  // 3D carousel layout: position N images evenly around a circle and spin the ring
+  (function(){
+    const ring = document.getElementById('carousel3d');
+    if(!ring) return;
 
-      const PX_PER_SEC = 50; // Adjust speed (px/sec)
+    function layout(){
+      const slides = Array.from(ring.children);
+      const n = slides.length;
+      if(n === 0) return;
 
-      function buildMarquee() {
-        // 1) Keep originals, remove previous clones
-        const originals = Array.from(track.children).filter(n => n.getAttribute("data-clone") !== "1");
-        track.innerHTML = "";
-        originals.forEach(n => track.appendChild(n));
+      // Angle between slides
+      const theta = 360 / n;
 
-        // 2) Measure first-set width (originals only)
-        const firstSetWidth = track.scrollWidth;
+      // Compute radius so that slides sit nicely without overlapping.
+      // radius ≈ (slideWidth / 2) / tan(pi / n) + some padding
+      const sample = slides[0];
+      const slideWidth = sample.getBoundingClientRect().width || 180;
+      const pad = 18; // a little breathing room
+      const radius = Math.max(120, (slideWidth/2 + pad) / Math.tan(Math.PI / n));
 
-        // 3) Clone until total width >= firstSetWidth + containerWidth + oneItemWidth
-        const containerWidth = container.clientWidth;
-        const oneItemWidth = originals[0]?.getBoundingClientRect().width || 0;
+      // Place each slide around the ring
+      slides.forEach((el, i) => {
+        const angle = i * theta;
+        el.style.transform = `rotateY(${angle}deg) translateZ(${radius}px)`;
+      });
 
-        let total = track.scrollWidth;
-        while (total < firstSetWidth + containerWidth + oneItemWidth) {
-          originals.forEach(n => {
-            const c = n.cloneNode(true);
-            c.setAttribute("data-clone", "1");
-            track.appendChild(c);
-          });
-          total = track.scrollWidth;
-        }
+      // Spin duration based on circumference so speed feels consistent
+      const circumference = 2 * Math.PI * radius;
+      const pxPerSec = 120; // speed control (higher = faster)
+      const duration = Math.max(12, circumference / pxPerSec);
+      ring.style.setProperty('--spin-duration', `${duration}s`);
+    }
 
-        // 4) Set CSS variables for distance and duration
-        const duration = firstSetWidth / PX_PER_SEC; // seconds to translate exactly one set
-        track.style.setProperty("--marquee-shift", firstSetWidth + "px");
-        track.style.setProperty("--marquee-duration", duration + "s");
-      }
+    // Initial layout + relayout when images load / window resizes
+    layout();
+    window.addEventListener('resize', layout);
+    Array.from(ring.querySelectorAll('img')).forEach(img => {
+      if (!img.complete) img.addEventListener('load', layout, { once:true });
+    });
+  })();
+</script>
 
-      function onReadyOnce() {
-        buildMarquee();
-        // Rebuild after images load (in case sizes change after load)
-        const imgs = track.querySelectorAll("img");
-        let pending = imgs.length;
-        if (pending === 0) return;
-        imgs.forEach(img => {
-          if (img.complete) { if (--pending === 0) buildMarquee(); }
-          else img.addEventListener("load", () => { if (--pending === 0) buildMarquee(); }, { once: true });
-        });
-      }
-
-      window.addEventListener("load", onReadyOnce);
-      window.addEventListener("resize", buildMarquee);
-    })();
-  </script>
 
   <!-- Play/Pause for Song -->
   <script>
@@ -640,3 +682,4 @@
   </script>
 </body>
 </html>
+
